@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.EmployeesMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.model.Employees" >
+    <id column="EmployeeID" property="employeeId" jdbcType="INTEGER" />
+    <result column="FirstName" property="firstName" jdbcType="VARCHAR" />
+    <result column="LastName" property="lastName" jdbcType="VARCHAR" />
+    <result column="Title" property="title" jdbcType="VARCHAR" />
+    <result column="WorkPhone" property="workPhone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    EmployeeID, FirstName, LastName, Title, WorkPhone
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from employees
+    where EmployeeID = #{employeeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from employees
+    where EmployeeID = #{employeeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.model.Employees" >
+    insert into employees (EmployeeID, FirstName, LastName, 
+      Title, WorkPhone)
+    values (#{employeeId,jdbcType=INTEGER}, #{firstName,jdbcType=VARCHAR}, #{lastName,jdbcType=VARCHAR},
+      #{title,jdbcType=VARCHAR}, #{workPhone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.model.Employees" >
+    insert into employees
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="employeeId != null" >
+        EmployeeID,
+      </if>
+      <if test="firstName != null" >
+        FirstName,
+      </if>
+      <if test="lastName != null" >
+        LastName,
+      </if>
+      <if test="title != null" >
+        Title,
+      </if>
+      <if test="workPhone != null" >
+        WorkPhone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="employeeId != null" >
+        #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="firstName != null" >
+        #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastName != null" >
+        #{lastName,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="workPhone != null" >
+        #{workPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.model.Employees" >
+    update employees
+    <set >
+      <if test="firstName != null" >
+        FirstName = #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastName != null" >
+        LastName = #{lastName,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        Title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="workPhone != null" >
+        WorkPhone = #{workPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where EmployeeID = #{employeeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.model.Employees" >
+    update employees
+    set FirstName = #{firstName,jdbcType=VARCHAR},
+      LastName = #{lastName,jdbcType=VARCHAR},
+      Title = #{title,jdbcType=VARCHAR},
+      WorkPhone = #{workPhone,jdbcType=VARCHAR}
+    where EmployeeID = #{employeeId,jdbcType=INTEGER}
+  </update>
+</mapper>

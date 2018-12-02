@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.CustomersMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.model.Customers" >
+    <id column="CustomerID" property="customerId" jdbcType="INTEGER" />
+    <result column="CompanyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="FirstName" property="firstName" jdbcType="VARCHAR" />
+    <result column="LastName" property="lastName" jdbcType="VARCHAR" />
+    <result column="BillingAddress" property="billingAddress" jdbcType="VARCHAR" />
+    <result column="City" property="city" jdbcType="VARCHAR" />
+    <result column="StateOrProvince" property="stateOrProvince" jdbcType="VARCHAR" />
+    <result column="ZIPCode" property="zipCode" jdbcType="VARCHAR" />
+    <result column="Email" property="email" jdbcType="VARCHAR" />
+    <result column="CompanyWebsite" property="companyWebsite" jdbcType="VARCHAR" />
+    <result column="PhoneNumber" property="phoneNumber" jdbcType="VARCHAR" />
+    <result column="FaxNumber" property="faxNumber" jdbcType="VARCHAR" />
+    <result column="ShipAddress" property="shipAddress" jdbcType="VARCHAR" />
+    <result column="ShipCity" property="shipCity" jdbcType="VARCHAR" />
+    <result column="ShipStateOrProvince" property="shipStateOrProvince" jdbcType="VARCHAR" />
+    <result column="ShipZipCode" property="shipZipCode" jdbcType="VARCHAR" />
+    <result column="ShipPhoneNumber" property="shipPhoneNumber" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CustomerID, CompanyName, FirstName, LastName, BillingAddress, City, StateOrProvince,
+    ZIPCode, Email, CompanyWebsite, PhoneNumber, FaxNumber, ShipAddress, ShipCity, ShipStateOrProvince, 
+    ShipZipCode, ShipPhoneNumber
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from customers
+    where CustomerID = #{customerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from customers
+    where CustomerID = #{customerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.model.Customers" >
+    insert into customers (CustomerID, CompanyName, FirstName,
+      LastName, BillingAddress, City, 
+      StateOrProvince, ZIPCode, Email, 
+      CompanyWebsite, PhoneNumber, FaxNumber, 
+      ShipAddress, ShipCity, ShipStateOrProvince, 
+      ShipZipCode, ShipPhoneNumber)
+    values (#{customerId,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR}, #{firstName,jdbcType=VARCHAR},
+      #{lastName,jdbcType=VARCHAR}, #{billingAddress,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+      #{stateOrProvince,jdbcType=VARCHAR}, #{zipCode,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+      #{companyWebsite,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{faxNumber,jdbcType=VARCHAR},
+      #{shipAddress,jdbcType=VARCHAR}, #{shipCity,jdbcType=VARCHAR}, #{shipStateOrProvince,jdbcType=VARCHAR},
+      #{shipZipCode,jdbcType=VARCHAR}, #{shipPhoneNumber,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.model.Customers" >
+    insert into customers
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        CustomerID,
+      </if>
+      <if test="companyName != null" >
+        CompanyName,
+      </if>
+      <if test="firstName != null" >
+        FirstName,
+      </if>
+      <if test="lastName != null" >
+        LastName,
+      </if>
+      <if test="billingAddress != null" >
+        BillingAddress,
+      </if>
+      <if test="city != null" >
+        City,
+      </if>
+      <if test="stateOrProvince != null" >
+        StateOrProvince,
+      </if>
+      <if test="zipCode != null" >
+        ZIPCode,
+      </if>
+      <if test="email != null" >
+        Email,
+      </if>
+      <if test="companyWebsite != null" >
+        CompanyWebsite,
+      </if>
+      <if test="phoneNumber != null" >
+        PhoneNumber,
+      </if>
+      <if test="faxNumber != null" >
+        FaxNumber,
+      </if>
+      <if test="shipAddress != null" >
+        ShipAddress,
+      </if>
+      <if test="shipCity != null" >
+        ShipCity,
+      </if>
+      <if test="shipStateOrProvince != null" >
+        ShipStateOrProvince,
+      </if>
+      <if test="shipZipCode != null" >
+        ShipZipCode,
+      </if>
+      <if test="shipPhoneNumber != null" >
+        ShipPhoneNumber,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="firstName != null" >
+        #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastName != null" >
+        #{lastName,jdbcType=VARCHAR},
+      </if>
+      <if test="billingAddress != null" >
+        #{billingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="stateOrProvince != null" >
+        #{stateOrProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="companyWebsite != null" >
+        #{companyWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null" >
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNumber != null" >
+        #{faxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="shipAddress != null" >
+        #{shipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shipCity != null" >
+        #{shipCity,jdbcType=VARCHAR},
+      </if>
+      <if test="shipStateOrProvince != null" >
+        #{shipStateOrProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="shipZipCode != null" >
+        #{shipZipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipPhoneNumber != null" >
+        #{shipPhoneNumber,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.model.Customers" >
+    update customers
+    <set >
+      <if test="companyName != null" >
+        CompanyName = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="firstName != null" >
+        FirstName = #{firstName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastName != null" >
+        LastName = #{lastName,jdbcType=VARCHAR},
+      </if>
+      <if test="billingAddress != null" >
+        BillingAddress = #{billingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        City = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="stateOrProvince != null" >
+        StateOrProvince = #{stateOrProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        ZIPCode = #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        Email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="companyWebsite != null" >
+        CompanyWebsite = #{companyWebsite,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null" >
+        PhoneNumber = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNumber != null" >
+        FaxNumber = #{faxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="shipAddress != null" >
+        ShipAddress = #{shipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shipCity != null" >
+        ShipCity = #{shipCity,jdbcType=VARCHAR},
+      </if>
+      <if test="shipStateOrProvince != null" >
+        ShipStateOrProvince = #{shipStateOrProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="shipZipCode != null" >
+        ShipZipCode = #{shipZipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipPhoneNumber != null" >
+        ShipPhoneNumber = #{shipPhoneNumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CustomerID = #{customerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.model.Customers" >
+    update customers
+    set CompanyName = #{companyName,jdbcType=VARCHAR},
+      FirstName = #{firstName,jdbcType=VARCHAR},
+      LastName = #{lastName,jdbcType=VARCHAR},
+      BillingAddress = #{billingAddress,jdbcType=VARCHAR},
+      City = #{city,jdbcType=VARCHAR},
+      StateOrProvince = #{stateOrProvince,jdbcType=VARCHAR},
+      ZIPCode = #{zipCode,jdbcType=VARCHAR},
+      Email = #{email,jdbcType=VARCHAR},
+      CompanyWebsite = #{companyWebsite,jdbcType=VARCHAR},
+      PhoneNumber = #{phoneNumber,jdbcType=VARCHAR},
+      FaxNumber = #{faxNumber,jdbcType=VARCHAR},
+      ShipAddress = #{shipAddress,jdbcType=VARCHAR},
+      ShipCity = #{shipCity,jdbcType=VARCHAR},
+      ShipStateOrProvince = #{shipStateOrProvince,jdbcType=VARCHAR},
+      ShipZipCode = #{shipZipCode,jdbcType=VARCHAR},
+      ShipPhoneNumber = #{shipPhoneNumber,jdbcType=VARCHAR}
+    where CustomerID = #{customerId,jdbcType=INTEGER}
+  </update>
+</mapper>

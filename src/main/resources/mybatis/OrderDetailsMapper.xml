@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.OrderDetailsMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.model.OrderDetails" >
+    <id column="OrderDetailID" property="orderDetailId" jdbcType="INTEGER" />
+    <result column="OrderID" property="orderId" jdbcType="INTEGER" />
+    <result column="ProductID" property="productId" jdbcType="INTEGER" />
+    <result column="Quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="UnitPrice" property="unitPrice" jdbcType="INTEGER" />
+    <result column="Discount" property="discount" jdbcType="INTEGER" />
+    <association property="products" column="{ProductID=ProductID}" select="getProducts" fetchType="eager"/>
+  </resultMap>
+
+  <resultMap id="ProductsMap" type="com.example.demo.model.Products" >
+    <id column="ProductID" property="productId" jdbcType="INTEGER" />
+    <result column="ProductName" property="productName" jdbcType="VARCHAR" />
+    <result column="UnitPrice" property="unitPrice" jdbcType="INTEGER" />
+    <result column="InStock" property="inStock" jdbcType="CHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    OrderDetailID, OrderID, ProductID, Quantity, UnitPrice, Discount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_details
+    where OrderDetailID = #{orderDetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from order_details
+    where OrderDetailID = #{orderDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.model.OrderDetails" >
+    insert into order_details (OrderDetailID, OrderID, ProductID, 
+      Quantity, UnitPrice, Discount
+      )
+    values (#{orderDetailId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER},
+      #{quantity,jdbcType=INTEGER}, #{unitPrice,jdbcType=INTEGER}, #{discount,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.model.OrderDetails" >
+    insert into order_details
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderDetailId != null" >
+        OrderDetailID,
+      </if>
+      <if test="orderId != null" >
+        OrderID,
+      </if>
+      <if test="productId != null" >
+        ProductID,
+      </if>
+      <if test="quantity != null" >
+        Quantity,
+      </if>
+      <if test="unitPrice != null" >
+        UnitPrice,
+      </if>
+      <if test="discount != null" >
+        Discount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderDetailId != null" >
+        #{orderDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.model.OrderDetails" >
+    update order_details
+    <set >
+      <if test="orderId != null" >
+        OrderID = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        ProductID = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null" >
+        Quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="unitPrice != null" >
+        UnitPrice = #{unitPrice,jdbcType=INTEGER},
+      </if>
+      <if test="discount != null" >
+        Discount = #{discount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where OrderDetailID = #{orderDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.model.OrderDetails" >
+    update order_details
+    set OrderID = #{orderId,jdbcType=INTEGER},
+      ProductID = #{productId,jdbcType=INTEGER},
+      Quantity = #{quantity,jdbcType=INTEGER},
+      UnitPrice = #{unitPrice,jdbcType=INTEGER},
+      Discount = #{discount,jdbcType=INTEGER}
+    where OrderDetailID = #{orderDetailId,jdbcType=INTEGER}
+  </update>
+
+  <select id="getProducts" resultMap="ProductsMap">
+    SELECT * FROM Products WHERE ProductID = #{ProductID}
+  </select>
+</mapper>

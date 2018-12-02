@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.ProductsMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.model.Products" >
+    <id column="ProductID" property="productId" jdbcType="INTEGER" />
+    <result column="ProductName" property="productName" jdbcType="VARCHAR" />
+    <result column="UnitPrice" property="unitPrice" jdbcType="INTEGER" />
+    <result column="InStock" property="inStock" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ProductID, ProductName, UnitPrice, InStock
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from products
+    where ProductID = #{productId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from products
+    where ProductID = #{productId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.model.Products" >
+    insert into products (ProductID, ProductName, UnitPrice, 
+      InStock)
+    values (#{productId,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, #{unitPrice,jdbcType=INTEGER},
+      #{inStock,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.model.Products" >
+    insert into products
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        ProductID,
+      </if>
+      <if test="productName != null" >
+        ProductName,
+      </if>
+      <if test="unitPrice != null" >
+        UnitPrice,
+      </if>
+      <if test="inStock != null" >
+        InStock,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=INTEGER},
+      </if>
+      <if test="inStock != null" >
+        #{inStock,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.model.Products" >
+    update products
+    <set >
+      <if test="productName != null" >
+        ProductName = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        UnitPrice = #{unitPrice,jdbcType=INTEGER},
+      </if>
+      <if test="inStock != null" >
+        InStock = #{inStock,jdbcType=CHAR},
+      </if>
+    </set>
+    where ProductID = #{productId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.model.Products" >
+    update products
+    set ProductName = #{productName,jdbcType=VARCHAR},
+      UnitPrice = #{unitPrice,jdbcType=INTEGER},
+      InStock = #{inStock,jdbcType=CHAR}
+    where ProductID = #{productId,jdbcType=INTEGER}
+  </update>
+</mapper>

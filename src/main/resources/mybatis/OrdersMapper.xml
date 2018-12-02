@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.OrdersMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.model.Orders" >
+    <id column="OrderID" property="orderId" jdbcType="INTEGER" />
+    <result column="CustomerID" property="customerId" jdbcType="INTEGER" />
+    <result column="EmployeeID" property="employeeId" jdbcType="INTEGER" />
+    <result column="OrderDate" property="orderDate" jdbcType="DATE" />
+    <result column="PurchaseOrderNumber" property="purchaseOrderNumber" jdbcType="VARCHAR" />
+    <result column="ShipDate" property="shipDate" jdbcType="DATE" />
+    <result column="ShippingMethodID" property="shippingMethodId" jdbcType="INTEGER" />
+    <result column="FreightCharge" property="freightCharge" jdbcType="INTEGER" />
+    <result column="Taxes" property="taxes" jdbcType="INTEGER" />
+    <result column="PaymentReceived" property="paymentReceived" jdbcType="CHAR" />
+    <result column="Comment" property="comment" jdbcType="VARCHAR" />
+    <association property="customers" column="{CustomerID=CustomerID}" select="getCustomers" fetchType="eager"/>
+    <association property="employees" column="{EmployeeID=EmployeeID}" select="getEmployees" fetchType="eager"/>
+    <association property="shippingMethods" column="{ShippingMethodID=ShippingMethodID}" select="getShippingMethods" fetchType="eager"/>
+    <collection property="orderDetails" column="{OrderID=OrderID}" ofType="OrderDetails" select="getOrderDetails" fetchType="lazy"/>
+  </resultMap>
+
+  <resultMap id="CustomersMap" type="com.example.demo.model.Customers" >
+    <id column="CustomerID" property="customerId" jdbcType="INTEGER" />
+    <result column="CompanyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="FirstName" property="firstName" jdbcType="VARCHAR" />
+    <result column="LastName" property="lastName" jdbcType="VARCHAR" />
+    <result column="BillingAddress" property="billingAddress" jdbcType="VARCHAR" />
+    <result column="City" property="city" jdbcType="VARCHAR" />
+    <result column="StateOrProvince" property="stateOrProvince" jdbcType="VARCHAR" />
+    <result column="ZIPCode" property="zipCode" jdbcType="VARCHAR" />
+    <result column="Email" property="email" jdbcType="VARCHAR" />
+    <result column="CompanyWebsite" property="companyWebsite" jdbcType="VARCHAR" />
+    <result column="PhoneNumber" property="phoneNumber" jdbcType="VARCHAR" />
+    <result column="FaxNumber" property="faxNumber" jdbcType="VARCHAR" />
+    <result column="ShipAddress" property="shipAddress" jdbcType="VARCHAR" />
+    <result column="ShipCity" property="shipCity" jdbcType="VARCHAR" />
+    <result column="ShipStateOrProvince" property="shipStateOrProvince" jdbcType="VARCHAR" />
+    <result column="ShipZipCode" property="shipZipCode" jdbcType="VARCHAR" />
+    <result column="ShipPhoneNumber" property="shipPhoneNumber" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="EmployeesMap" type="com.example.demo.model.Employees" >
+    <id column="EmployeeID" property="employeeId" jdbcType="INTEGER" />
+    <result column="FirstName" property="firstName" jdbcType="VARCHAR" />
+    <result column="LastName" property="lastName" jdbcType="VARCHAR" />
+    <result column="Title" property="title" jdbcType="VARCHAR" />
+    <result column="WorkPhone" property="workPhone" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="ShippingMethodsMap" type="com.example.demo.model.ShippingMethods" >
+    <id column="ShippingMethodID" property="shippingMethodId" jdbcType="INTEGER" />
+    <result column="ShippingMethod" property="shippingMethod" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="OrderDetailsMap" type="com.example.demo.model.OrderDetails" >
+    <id column="OrderDetailID" property="orderDetailId" jdbcType="INTEGER" />
+    <result column="OrderID" property="orderId" jdbcType="INTEGER" />
+    <result column="ProductID" property="productId" jdbcType="INTEGER" />
+    <result column="Quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="UnitPrice" property="unitPrice" jdbcType="INTEGER" />
+    <result column="Discount" property="discount" jdbcType="INTEGER" />
+    <association property="products" column="{ProductID=ProductID}" select="getProducts" fetchType="eager"/>
+  </resultMap>
+
+  <resultMap id="ProductsMap" type="com.example.demo.model.Products" >
+    <id column="ProductID" property="productId" jdbcType="INTEGER" />
+    <result column="ProductName" property="productName" jdbcType="VARCHAR" />
+    <result column="UnitPrice" property="unitPrice" jdbcType="INTEGER" />
+    <result column="InStock" property="inStock" jdbcType="CHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    OrderID, CustomerID, EmployeeID, OrderDate, PurchaseOrderNumber, ShipDate, ShippingMethodID, 
+    FreightCharge, Taxes, PaymentReceived, Comment
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where OrderID = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from orders
+    where OrderID = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.model.Orders" >
+    insert into orders (OrderID, CustomerID, EmployeeID, 
+      OrderDate, PurchaseOrderNumber, ShipDate, 
+      ShippingMethodID, FreightCharge, Taxes, 
+      PaymentReceived, Comment)
+    values (#{orderId,jdbcType=INTEGER}, #{customerId,jdbcType=INTEGER}, #{employeeId,jdbcType=INTEGER},
+      #{orderDate,jdbcType=DATE}, #{purchaseOrderNumber,jdbcType=VARCHAR}, #{shipDate,jdbcType=DATE},
+      #{shippingMethodId,jdbcType=INTEGER}, #{freightCharge,jdbcType=INTEGER}, #{taxes,jdbcType=INTEGER},
+      #{paymentReceived,jdbcType=CHAR}, #{comment,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.model.Orders" >
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        OrderID,
+      </if>
+      <if test="customerId != null" >
+        CustomerID,
+      </if>
+      <if test="employeeId != null" >
+        EmployeeID,
+      </if>
+      <if test="orderDate != null" >
+        OrderDate,
+      </if>
+      <if test="purchaseOrderNumber != null" >
+        PurchaseOrderNumber,
+      </if>
+      <if test="shipDate != null" >
+        ShipDate,
+      </if>
+      <if test="shippingMethodId != null" >
+        ShippingMethodID,
+      </if>
+      <if test="freightCharge != null" >
+        FreightCharge,
+      </if>
+      <if test="taxes != null" >
+        Taxes,
+      </if>
+      <if test="paymentReceived != null" >
+        PaymentReceived,
+      </if>
+      <if test="comment != null" >
+        Comment,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="employeeId != null" >
+        #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDate != null" >
+        #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="purchaseOrderNumber != null" >
+        #{purchaseOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="shipDate != null" >
+        #{shipDate,jdbcType=DATE},
+      </if>
+      <if test="shippingMethodId != null" >
+        #{shippingMethodId,jdbcType=INTEGER},
+      </if>
+      <if test="freightCharge != null" >
+        #{freightCharge,jdbcType=INTEGER},
+      </if>
+      <if test="taxes != null" >
+        #{taxes,jdbcType=INTEGER},
+      </if>
+      <if test="paymentReceived != null" >
+        #{paymentReceived,jdbcType=CHAR},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.model.Orders" >
+    update orders
+    <set >
+      <if test="customerId != null" >
+        CustomerID = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="employeeId != null" >
+        EmployeeID = #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDate != null" >
+        OrderDate = #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="purchaseOrderNumber != null" >
+        PurchaseOrderNumber = #{purchaseOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="shipDate != null" >
+        ShipDate = #{shipDate,jdbcType=DATE},
+      </if>
+      <if test="shippingMethodId != null" >
+        ShippingMethodID = #{shippingMethodId,jdbcType=INTEGER},
+      </if>
+      <if test="freightCharge != null" >
+        FreightCharge = #{freightCharge,jdbcType=INTEGER},
+      </if>
+      <if test="taxes != null" >
+        Taxes = #{taxes,jdbcType=INTEGER},
+      </if>
+      <if test="paymentReceived != null" >
+        PaymentReceived = #{paymentReceived,jdbcType=CHAR},
+      </if>
+      <if test="comment != null" >
+        Comment = #{comment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OrderID = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.model.Orders" >
+    update orders
+    set CustomerID = #{customerId,jdbcType=INTEGER},
+      EmployeeID = #{employeeId,jdbcType=INTEGER},
+      OrderDate = #{orderDate,jdbcType=DATE},
+      PurchaseOrderNumber = #{purchaseOrderNumber,jdbcType=VARCHAR},
+      ShipDate = #{shipDate,jdbcType=DATE},
+      ShippingMethodID = #{shippingMethodId,jdbcType=INTEGER},
+      FreightCharge = #{freightCharge,jdbcType=INTEGER},
+      Taxes = #{taxes,jdbcType=INTEGER},
+      PaymentReceived = #{paymentReceived,jdbcType=CHAR},
+      Comment = #{comment,jdbcType=VARCHAR}
+    where OrderID = #{orderId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectOrdersPage" parameterType="Orders" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM
+      orders
+    LIMIT
+    #{startIndex}, #{endIndex}
+  </select>
+
+  <select id="getCustomers" resultMap="CustomersMap">
+    SELECT * FROM customers WHERE CustomerID = #{CustomerID}
+  </select>
+
+  <select id="getEmployees" resultMap="EmployeesMap">
+    SELECT * FROM employees WHERE EmployeeID = #{EmployeeID}
+  </select>
+
+  <select id="getShippingMethods" resultMap="ShippingMethodsMap">
+    SELECT * FROM shipping_methods WHERE ShippingMethodID = #{ShippingMethodID}
+  </select>
+
+  <select id="getOrderDetails" resultMap="OrderDetailsMap">
+    SELECT * FROM order_details WHERE OrderID = #{OrderID}
+  </select>
+
+  <select id="getProducts" resultMap="ProductsMap">
+    SELECT * FROM Products WHERE ProductID = #{ProductID}
+  </select>
+</mapper>

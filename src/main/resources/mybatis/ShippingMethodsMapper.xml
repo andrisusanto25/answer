@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.dao.ShippingMethodsMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.model.ShippingMethods" >
+    <id column="ShippingMethodID" property="shippingMethodId" jdbcType="INTEGER" />
+    <result column="ShippingMethod" property="shippingMethod" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ShippingMethodID, ShippingMethod
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from shipping_methods
+    where ShippingMethodID = #{shippingMethodId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from shipping_methods
+    where ShippingMethodID = #{shippingMethodId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.model.ShippingMethods" >
+    insert into shipping_methods (ShippingMethodID, ShippingMethod)
+    values (#{shippingMethodId,jdbcType=INTEGER}, #{shippingMethod,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.model.ShippingMethods" >
+    insert into shipping_methods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shippingMethodId != null" >
+        ShippingMethodID,
+      </if>
+      <if test="shippingMethod != null" >
+        ShippingMethod,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shippingMethodId != null" >
+        #{shippingMethodId,jdbcType=INTEGER},
+      </if>
+      <if test="shippingMethod != null" >
+        #{shippingMethod,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.model.ShippingMethods" >
+    update shipping_methods
+    <set >
+      <if test="shippingMethod != null" >
+        ShippingMethod = #{shippingMethod,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ShippingMethodID = #{shippingMethodId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.model.ShippingMethods" >
+    update shipping_methods
+    set ShippingMethod = #{shippingMethod,jdbcType=VARCHAR}
+    where ShippingMethodID = #{shippingMethodId,jdbcType=INTEGER}
+  </update>
+</mapper>
